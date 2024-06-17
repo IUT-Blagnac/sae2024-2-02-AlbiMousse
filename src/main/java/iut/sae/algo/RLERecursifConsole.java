@@ -29,7 +29,7 @@ public class RLERecursifConsole{
             System.out.println("Itérations : "+iterations);
             System.out.println("Sortie : "+ Algo.RLE(in, iterations));
         }
-        catch(AlgoException e){
+        catch(Exception e){
             System.err.println("Erreur lors de la transformation");
         }
     }
