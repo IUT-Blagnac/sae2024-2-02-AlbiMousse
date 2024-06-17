@@ -1,76 +1,89 @@
 package iut.sae.algo;
 
+public class Algo {
 
-public class Algo{
-    public static String RLE(String chaine){
-        // Utilisation d'un StringBuilder (pour améliorer le temps d'execution) car l'object String ne concatène pas simplement plusieurs chaine.
-        // Initialisation d'un compteur et d'un indice
-        StringBuilder dBuilder = new StringBuilder();
-        int cptChar = 1;
-        char charC;
-        int i = 0;
+    // Encoder une chaîne avec RLE
+    public static String RLE(String in) {
+        if (in == null || in.isEmpty()) {
+            return "";
+        }
 
-        while(i < chaine.length()){
-            charC = chaine.charAt(i);
+        StringBuilder result = new StringBuilder();
+        char prevChar = in.charAt(0);
+        int count = 1;
 
-            while (i+1 < chaine.length() && charC == chaine.charAt(i+1)){
-                cptChar++;
-                i++;
-                if (cptChar == 9) {
-                    dBuilder.append(9).append(charC);
-                    cptChar = 0;
+        for (int i = 1; i < in.length(); i++) {
+            char currChar = in.charAt(i);
+            if (currChar == prevChar) {
+                count++;
+                if (count == 10) {  // Séparer le compteur si il dépasse 9
+                    result.append(9).append(prevChar);
+                    count = 1;
                 }
-                
-            } 
-            if (cptChar > 0) {
-                dBuilder.append(cptChar).append(charC);
+            } else {
+                result.append(count).append(prevChar);
+                prevChar = currChar;
+                count = 1;
             }
-            cptChar = 1;
+        }
+        result.append(count).append(prevChar);
+
+        return result.toString();
+    }
+
+    // Encodage RLE récursif
+    public static String RLE(String in, int iteration) throws AlgoException {
+        if (iteration < 1) {
+            throw new AlgoException("Le nombre d'itérations doit être supérieur ou égal à 1");
+        }
+        String result = in;
+        for (int i = 0; i < iteration; i++) {
+            result = RLE(result);
+        }
+        return result;
+    }
+
+    // Décoder une chaîne avec RLE
+    public static String unRLE(String in) throws AlgoException {
+        if (in == null || in.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < in.length(); i++) {
+            char countChar = in.charAt(i);
+
+            if (!Character.isDigit(countChar)) {
+                throw new AlgoException("Format de chaîne RLE invalide");
+            }
+
+            int count = Character.getNumericValue(countChar);
             i++;
-        }
-        // On retourne la méthode toString() du builder qui renvoie la chaîne compressée
-        return dBuilder.toString();
-    }
 
-    public static String RLE(String chaine, int iteration) throws AlgoException{
-        if (iteration == 0){
-            return chaine;
-        }
-        else{
-            return RLE(RLE(chaine), iteration-1);
-        }
-        
-    }
+            if (i >= in.length()) {
+                throw new AlgoException("Format de chaîne RLE invalide");
+            }
 
-    public static String unRLE(String chaine) throws AlgoException{
-        if (chaine.length() == 0 || !Character.isDigit(chaine.charAt(0))) {
-            return chaine;
-        }
-        StringBuilder dBuilder = new StringBuilder();
+            char letter = in.charAt(i);
 
-        // On parcourt la chaine de 2 en 2 (pour chaque couple compteur/caractère)
-        for (int i = 0; i < chaine.length(); i+=2) {
-            // On récupère le compteur devant le caractère...
-            int cptChar = Character.getNumericValue(chaine.charAt(i));
-            char carac = chaine.charAt(i+1);
-
-            // ... et on ajoute le caractère le nombre de fois nécessaire (=compteur)
-            for(int j = 0; j < cptChar; j++){
-                dBuilder.append(carac);
+            for (int j = 0; j < count; j++) {
+                result.append(letter);
             }
         }
-    return dBuilder.toString();
 
+        return result.toString();
     }
 
-    public static String unRLE(String chaine, int iteration) throws AlgoException{
-        if (iteration == 0){
-            return chaine;
+    // Décodage RLE récursif
+    public static String unRLE(String in, int iteration) throws AlgoException {
+        if (iteration < 1) {
+            throw new AlgoException("Le nombre d'itérations doit être supérieur ou égal à 1");
         }
-        else {
-            return unRLE(unRLE(chaine), iteration-1);
+        String result = in;
+        for (int i = 0; i < iteration; i++) {
+            result = unRLE(result);
         }
-
+        return result;
     }
 }
-
