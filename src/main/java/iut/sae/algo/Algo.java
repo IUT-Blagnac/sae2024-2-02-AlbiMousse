@@ -1,70 +1,74 @@
 package iut.sae.algo;
 
 public class Algo {
-
-    public static String RLE(String texte) {
-        // si le texte est null ou vide, retourne une chaîne vide
-        if (texte == null || texte.length() == 0) {
+    public static String RLE(String chaineDeCaractere) {
+        if (chaineDeCaractere.length() == 0) {
             return "";
         }
 
-        // on cree un StringBuilder
-        StringBuilder resultat = new StringBuilder();
-
+        String resultat = "";
         int compteur = 1;
-        char caractere = texte.charAt(0);
+        char premierCaractere = chaineDeCaractere.charAt(0);
 
-        // Parcourt le texte à partir du deuxième caractère
-        for (int i = 1; i < texte.length(); i++) {
-            // si le caractère actuel est le même que le précédent et que le compteur est inférieur à 9
-            if (texte.charAt(i) == caractere && compteur < 9) {
+        for (int i = 1; i < chaineDeCaractere.length(); i++) {
+            if (chaineDeCaractere.charAt(i) == premierCaractere) {
                 compteur++;
+                if (compteur == 9) {
+                    resultat += compteur + String.valueOf(premierCaractere);
+                    compteur = 0;
+                }
             } else {
-                // sinon on ajoute le compteur et le caractère au résultat
-                resultat.append(compteur).append(caractere);
-                // on remets les variables a jour
+                if (compteur > 0) {
+                    resultat += compteur + String.valueOf(premierCaractere);
+                }
+                premierCaractere = chaineDeCaractere.charAt(i);
                 compteur = 1;
-                caractere = texte.charAt(i);
             }
         }
 
-        // on ajoute ce qu'il reste au resultat
-        resultat.append(compteur).append(caractere);
-
-        // on mets le resultat sous forme de string et on le renvoie
-        return resultat.toString();
-    }
-
-    public static String RLE(String chaine, int nombre) {
-        if (nombre <= 0) {
-            return chaine;
+        if (compteur > 0) {
+            resultat += compteur + String.valueOf(premierCaractere);
         }
 
-        String resultat = chaine;
-        for (int i = 0; i < nombre; i++) {
+        return resultat;
+    }
+
+    public static String RLE(String chaineDeCaractere, int iteration) {
+        String resultat = chaineDeCaractere;
+        for (int i = 0; i < iteration; i++) {
             resultat = RLE(resultat);
         }
         return resultat;
     }
 
-    public static String unRLE(String chaine) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < chaine.length(); i += 2) {
-            int nombre = Character.getNumericValue(chaine.charAt(i));
-            char caractere = chaine.charAt(i + 1);
-            for (int j = 0; j < nombre; j++) {
-                result.append(caractere);
+    public static String unRLE(String chaineCompressee) {
+        String resultat = "";
+        int longueur = chaineCompressee.length();
+
+        for (int i = 0; i < longueur; i++) {
+            char caractere = chaineCompressee.charAt(i);
+
+            if (Character.isDigit(caractere)) {
+                int nombre = Character.getNumericValue(caractere);
+                char caractereSuivant = chaineCompressee.charAt(++i);
+
+                for (int j = 0; j < nombre; j++) {
+                    resultat += caractereSuivant;
+                }
+            } else {
+                resultat += caractere;
             }
         }
-        return result.toString();
+
+        return resultat;
     }
 
-
-    public static String unRLE(String chaine, int nombre) {
-        String resultat = chaine;
-        for (int i = 0; i < nombre; i++) {
+    public static String unRLE(String chaineCompressee, int iteration) {
+        String resultat = chaineCompressee;
+        for (int i = 0; i < iteration; i++) {
             resultat = unRLE(resultat);
         }
         return resultat;
     }
+
 }
