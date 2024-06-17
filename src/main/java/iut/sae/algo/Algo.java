@@ -1,89 +1,64 @@
 package iut.sae.algo;
 
-public class Algo {
 
-    // Encoder une chaîne avec RLE
-    public static String RLE(String in) {
-        if (in == null || in.isEmpty()) {
-            return "";
-        }
+public class Algo{
+    public static String RLE(String in){
+        // Provide your algo here
+        return "NotYetImplemented";
+    }
 
+    public static String unRLE(String in) throws AlgoException{
+        // Provide your algo here
+        return "NotYetImplemented";
+
+    }
+// Méthode pour compresser la chaîne avec l'algorithme RLE
+    public static String RLE(String input, int iteration) {
         StringBuilder result = new StringBuilder();
-        char prevChar = in.charAt(0);
-        int count = 1;
+        for (char c : input.toCharArray()) {
+            result.append(iteration).append(c);
+        }
+        return result.toString();
+    }
 
-        for (int i = 1; i < in.length(); i++) {
-            char currChar = in.charAt(i);
-            if (currChar == prevChar) {
-                count++;
-                if (count == 10) {  // Séparer le compteur si il dépasse 9
-                    result.append(9).append(prevChar);
-                    count = 1;
+    // Méthode pour décompresser la chaîne encodée avec l'algorithme RLE
+    public static String unRLE(String input, int iteration) throws AlgoException {
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        while (i < input.length()) {
+            // Lire le nombre
+            StringBuilder numStr = new StringBuilder();
+            while (i < input.length() && Character.isDigit(input.charAt(i))) {
+                numStr.append(input.charAt(i));
+                i++;
+            }
+            // Convertir le nombre en entier
+            int num;
+            try {
+                num = Integer.parseInt(numStr.toString());
+            } catch (NumberFormatException e) {
+                throw new AlgoException("Invalid RLE format");
+            }
+            // Lire le caractère
+            if (i < input.length()) {
+                char c = input.charAt(i);
+                i++;
+                // Ajouter le caractère à la chaîne résultat
+                for (int j = 0; j < iteration; j++) {
+                    result.append(c);
                 }
             } else {
-                result.append(count).append(prevChar);
-                prevChar = currChar;
-                count = 1;
+                throw new AlgoException("Invalid RLE format");
             }
         }
-        result.append(count).append(prevChar);
-
         return result.toString();
     }
 
-    // Encodage RLE récursif
-    public static String RLE(String in, int iteration) throws AlgoException {
-        if (iteration < 1) {
-            throw new AlgoException("Le nombre d'itérations doit être supérieur ou égal à 1");
+    // Exception personnalisée
+    public static class AlgoException extends Exception {
+        public AlgoException(String message) {
+            super(message);
         }
-        String result = in;
-        for (int i = 0; i < iteration; i++) {
-            result = RLE(result);
-        }
-        return result;
-    }
-
-    // Décoder une chaîne avec RLE
-    public static String unRLE(String in) throws AlgoException {
-        if (in == null || in.isEmpty()) {
-            return "";
-        }
-
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0; i < in.length(); i++) {
-            char countChar = in.charAt(i);
-
-            if (!Character.isDigit(countChar)) {
-                throw new AlgoException("Format de chaîne RLE invalide");
-            }
-
-            int count = Character.getNumericValue(countChar);
-            i++;
-
-            if (i >= in.length()) {
-                throw new AlgoException("Format de chaîne RLE invalide");
-            }
-
-            char letter = in.charAt(i);
-
-            for (int j = 0; j < count; j++) {
-                result.append(letter);
-            }
-        }
-
-        return result.toString();
-    }
-
-    // Décodage RLE récursif
-    public static String unRLE(String in, int iteration) throws AlgoException {
-        if (iteration < 1) {
-            throw new AlgoException("Le nombre d'itérations doit être supérieur ou égal à 1");
-        }
-        String result = in;
-        for (int i = 0; i < iteration; i++) {
-            result = unRLE(result);
-        }
-        return result;
     }
 }
+
