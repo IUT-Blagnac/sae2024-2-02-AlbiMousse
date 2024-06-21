@@ -185,9 +185,9 @@ WARNING: Les répertoires et fichiers existants devront être complétés et mis
 
 Voici les pré-requis pour exécuter nos codes d'évaluation.
 
-- Java 19
-- Compilateur C
-- Interpréteur Python
+- Java 19 pour Java
+- Compilateur C pour C
+- Interpréteur Python pour Python
 
 === Reproductibilité
 
