@@ -185,15 +185,20 @@ WARNING: Les répertoires et fichiers existants devront être complétés et mis
 
 Voici les pré-requis pour exécuter nos codes d'évaluation.
 
-- Java v.x.y.z
-- ...
+- Java 19
+- Compilateur C
+- Interpréteur Python
 
 === Reproductibilité
 
 - Pour reproduire nos analyses :
-. Installez X
-. Lancez Y
-. ...
+. Récupérer RLERuntimeTest situé dans analyse
+. L'insérer dans le dossier main\java\iut\sae\algo
+. Si la classe fournie respecte les normes demandées, alors tout devrait fonctionner.
+
+- Pour Python : 
+. Copier coller le script fournie entre @pyRAPL.measure() et start_time
+. Change RLE par unRLE dans la boucle pour tester l'un ou l'autre
 
 === Références
 
