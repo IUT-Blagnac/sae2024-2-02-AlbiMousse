@@ -2,7 +2,8 @@ import time
 import pyRAPL
 
 pyRAPL.setup()
-
+#Copier coller le programme RLE entre pyRAPL.measure() et start_time()
+#Change RLE par unRLE dans result = unRLE("eeeaaaazzz") pour tester l'un ou l'autre
 @pyRAPL.measure
 def RLE(chaine :str ) -> str:
     nvlchaine = ""
